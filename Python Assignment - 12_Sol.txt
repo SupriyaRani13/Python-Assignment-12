@@ -1,0 +1,453 @@
+Python Assignment - 12
+
+1. In what modes should the PdfFileReader() and PdfFileWriter() File objects will be opened?
+
+Sol: In the PyPDF2 library (Python library for working with PDF files), when using PdfFileReader() and PdfFileWriter() objects, 
+     we should open the PDF file in binary mode. Both PdfFileReader() and PdfFileWriter() expect the file to be opened in binary mode
+     to handle the PDF data correctly.
+
+    Eg - PdfFileReader():
+
+    from PyPDF2 import PdfFileReader
+
+    with open('input.pdf', 'rb') as file:
+    pdf_reader = PdfFileReader(file)
+    # Your code to work with the PDF file goes here
+
+   Eg - PdfFileWriter():
+
+   from PyPDF2 import PdfFileWriter
+
+    with open('output.pdf', 'wb') as file:
+    pdf_writer = PdfFileWriter()
+    # Your code to create or modify the PDF file goes here
+    pdf_writer.write(file)
+
+
+2. From a PdfFileReader object, how do you get a Page object for page 5?
+
+Sol: To get a Page object for page 5 from a PdfFileReader object in the PyPDF2 library, we can use the getPage() method and 
+     pass the index of the desired page (remember that page indices are zero-based). 
+
+    Eg - from PyPDF2 import PdfFileReader
+
+      # Assuming you have already created the PdfFileReader object called "pdf_reader"
+      page_number = 4  # Page index is zero-based, so 4 corresponds to the 5th page.
+      page = pdf_reader.getPage(page_number)
+
+      # Now you can work with the 'page' object, such as extracting text or manipulating it.
+
+
+3. What PdfFileReader variable stores the number of pages in the PDF document?
+
+Sol: In the PyPDF2 library, the variable that stores the number of pages in the PDF document when using a PdfFileReader object is called numPages.
+   
+    Eg - from PyPDF2 import PdfFileReader
+
+      # Assuming you have already created the PdfFileReader object called "pdf_reader"
+      num_of_pages = pdf_reader.numPages
+
+      print(f"The PDF document contains {num_of_pages} pages.")
+
+    The numPages attribute gives you the total number of pages in the PDF document. This information can be useful when 
+    we need to loop through all the pages or perform operations on specific pages within the document.
+
+
+4. If a PdfFileReader object’s PDF is encrypted with the password swordfish, what must you do
+   before you can obtain Page objects from it?
+
+Sol:  If a PdfFileReader object's PDF is encrypted with the password "swordfish," we must set the password before you can obtain Page objects from it. 
+      This is necessary to decrypt the PDF content and access its pages.
+
+     Eg - from PyPDF2 import PdfFileReader
+
+       # Assuming you have already created the PdfFileReader object called "pdf_reader"
+       password = "swordfish"
+       pdf_reader.decrypt(password)
+
+      # Now you can access the pages using getPage() or other methods.
+
+After calling decrypt(password), the PdfFileReader object will be able to read and access the pages of the encrypted PDF using methods like getPage(), getNumPages(), etc. Make sure to provide the correct password; otherwise, you won't be able to decrypt the PDF, and accessing its pages will raise an exception.
+
+
+5. What methods do you use to rotate a page?
+
+Sol: To rotate a page in a PDF using the PyPDF2 library, you can use the rotateClockwise() and rotateCounterClockwise() methods provided
+     by the Page object. These methods allow us to rotate a specific page by 90 degrees clockwise or counterclockwise, respectively.
+
+    Eg- from PyPDF2 import PdfFileReader, PdfFileWriter
+
+    # Assuming you have already created the PdfFileReader object called "pdf_reader"
+    # and you want to rotate page number 0 (the first page).
+    page_number_to_rotate = 0
+
+    # Get the page object
+    page = pdf_reader.getPage(page_number_to_rotate)
+
+    # Rotate the page clockwise by 90 degrees
+    page.rotateClockwise(90)
+
+    # Now you can save the modified page to a new PDF or perform other operations.
+    # For example, if you want to save the modified page to a new PDF file:
+    pdf_writer = PdfFileWriter()
+    pdf_writer.addPage(page)
+
+    with open('output.pdf', 'wb') as output_file:
+    pdf_writer.write(output_file)
+
+ In this example, we use rotateClockwise(90) to rotate the first page (index 0) of the PDF 90 degrees clockwise. If we want to rotate counterclockwise,
+ we can use the rotateCounterClockwise(90) method instead. After rotating the page, we can save the modified page to a new PDF file or perform 
+ other operations as needed.
+
+
+6. What is the difference between a Run object and a Paragraph object?
+
+Sol: "Run object" and "Paragraph object" are specific to the python-docx library, which is a Python library for working with Microsoft Word (.docx) 
+      files. Both "Run" and "Paragraph" are elements that make up the structure of a Word document, and they serve different purposes.
+
+  a) Run Object:
+     A "Run" object in python-docx represents a contiguous run of text with the same style within a paragraph.
+
+    Eg - if you have the sentence "This is a bold text.", where "bold" is in bold font, the sentence will have two runs—one for the normal text 
+         and one for the bold text.
+
+   b) Paragraph Object:
+
+    A "Paragraph" object in python-docx represents a single paragraph of text in a Word document. A paragraph can contain one or more "Run"
+    objects representing different styles within the paragraph.  
+
+    Eg - a paragraph may contain a mix of regular and bold text, each represented by separate "Run" objects.
+
+   Eg - Run" object and a "Paragraph" object:
+   
+    from docx import Document
+
+   # Create a new document
+   doc = Document()
+
+   # Add a paragraph with different styles
+   p = doc.add_paragraph()
+   p.add_run("This is regular text. ")
+   p.add_run("This is bold text.").bold = True
+
+   # Save the document
+   doc.save("example.docx")
+
+
+7. How do you obtain a list of Paragraph objects for a Document object that’s stored in a variable
+   named doc?
+
+ Sol: Paragraph objects for a Document object stored in a variable named doc using the python-docx library, we can use the paragraphs
+      attribute of the Document object. The paragraphs attribute contains a list of all the Paragraph objects present in the document.
+
+   Eg - from docx import Document
+
+     # Assuming you have already loaded a Document object named "doc"
+     # If you haven't loaded a document yet, you can do it like this:
+     # doc = Document('path/to/your/document.docx')
+
+    # Get the list of Paragraph objects
+    paragraphs_list = doc.paragraphs
+
+    # Now you can work with the list of paragraphs, iterate through them, or perform other operations.
+    for paragraph in paragraphs_list:
+       print(paragraph.text)
+
+
+  In this example, we use the paragraphs attribute of the Document object to obtain the list of Paragraph objects. we can then iterate through
+  this list and perform operations on each paragraph. For example, you can access the text of each paragraph using the text attribute of the
+  Paragraph object.
+
+
+8. What type of object has bold, underline, italic, strike, and outline variables?
+
+Sol: The bold, underline, italic, strike, and outline variables are attributes of the Font object in the python-docx library. 
+     The Font object represents the font properties (e.g., font size, color, style) applied to a Run or Paragraph object in a Word document.
+
+   Eg - from docx import Document
+
+       # Create a new document
+       doc = Document()
+
+      # Add a paragraph with a Run containing formatted text
+      p = doc.add_paragraph()
+      run = p.add_run("This is a sample text with formatting.")
+      run.bold = True
+      run.italic = True
+      run.underline = True
+      run.strike = True
+      run.font.outline = True
+
+     # Save the document
+     doc.save("formatted_example.docx")
+
+In this example, we create a Document object and add a paragraph to it. Inside the paragraph, we add a Run object containing the text "This is a sample text with formatting." We then set the bold, italic, underline, strike, and outline attributes of the Font object associated with the Run. As a result, the text will appear bold, italic, underlined, struck through, and outlined when the document is saved.
+
+
+9. What is the difference between False, True, and None for the bold variable?
+
+Sol: In the context of the bold variable in the Font object of the python-docx library, False, True, and None represent different
+     settings for the bold formatting of text.
+
+ a) False: Setting bold to False means that the text will not be bold. It will appear with the regular or default font weight.
+
+ b) True: Setting bold to True means that the text will be displayed in bold. It will have a heavier font weight than the regular text.
+
+ c) None: If the bold attribute is set to None, it means that the bold formatting for the text is not explicitly specified. In this case, the 
+    formatting will depend on the parent style applied to the text. If the parent style defines the text to be bold, it will appear bold; 
+    otherwise, it will appear regular.
+
+   Eg - from docx import Document
+
+     doc = Document()
+     p = doc.add_paragraph()
+     run = p.add_run("This is some text.")
+
+    # Default: The text will appear with the regular font weight (not bold)
+    run.bold = False
+
+    # The text will appear in bold
+    run.bold = True
+
+   # The text will follow the parent style for bold formatting (if specified in the style)
+   run.bold = None
+
+   # Save the document
+   doc.save("bold_example.docx")
+
+
+10. How do you create a Document object for a new Word document?
+
+Sol: To create a new Word document using the python-docx library, you need to create a Document object. The Document object is the top-level 
+     container that represents the entire document.
+
+   Eg - from docx import Document
+
+    # Create a new Document object
+    doc = Document()
+
+    # Now you can work with the Document object and add content, paragraphs, tables, etc.
+
+    # Add a paragraph to the document
+    doc.add_paragraph("This is the first paragraph.")
+
+    # Add another paragraph
+    doc.add_paragraph("This is the second paragraph.")
+
+    # Save the document to a file
+    doc.save("new_document.docx")
+
+
+11. How do you add a paragraph with the text &#39;Hello, there!&#39; to a Document object stored in a
+    variable named doc?
+
+Sol: To add a paragraph with the text 'Hello, there!' to a Document object stored in a variable named doc using the python-docx library, 
+     we can use the add_paragraph() method of the Document object.
+
+     Eg - from docx import Document
+
+     # Assuming you have already created a Document object named "doc"
+     # If you haven't created a Document yet, you can do it like this:
+     # doc = Document()
+
+     # Add a paragraph with the text 'Hello, there!' to the Document
+     doc.add_paragraph('Hello, there!')
+
+     # Now you can work with the Document object and add more content, paragraphs, etc.
+
+     # Save the document to a file
+     doc.save('my_document.docx')
+
+In this example, we use the add_paragraph() method of the Document object to add a new paragraph with the specified text 'Hello, there!'. The paragraph will be added to the end of the document. You can repeat this step to add more paragraphs or use other methods to add tables, images, and perform other operations on the Document object.
+
+
+12. What integers represent the levels of headings available in Word documents?
+
+Sol: In Word documents, heading levels are represented by integers to define different levels of headings. The common heading levels
+     available in Word documents are as follows:
+
+
+     Heading 1: Represented by the integer 1
+     Heading 2: Represented by the integer 2
+     Heading 3: Represented by the integer 3
+     Heading 4: Represented by the integer 4
+     Heading 5: Represented by the integer 5
+     Heading 6: Represented by the integer 6
+     Heading 7: Represented by the integer 7
+     Heading 8: Represented by the integer 8
+     Heading 9: Represented by the integer 9
+
+  When working with the python-docx library to create Word documents programmatically, you can set the heading level for a paragraph using 
+  the heading_level attribute of the Paragraph object.
+
+   Eg - from docx import Document
+
+      # Create a new Document object
+      doc = Document()
+
+      # Add a paragraph with Heading 1 level
+      p1 = doc.add_paragraph('Heading 1', heading_level=1)
+
+      # Add a paragraph with Heading 2 level
+      p2 = doc.add_paragraph('Heading 2', heading_level=2)
+
+      # Save the document to a file
+      doc.save('heading_levels.docx')
+
+   In this example, we use the heading_level attribute of the add_paragraph() method to specify the heading level for each paragraph. 
+   The paragraph with "Heading 1" text will be a Heading 1 level, and the paragraph with "Heading 2" text will be a Heading 2 level.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
